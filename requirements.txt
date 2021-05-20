@@ -1,0 +1,15 @@
+pandas
+pillow
+numpy
+matplotlib
+scikit-learn
+scikit-image
+scipy==1.1.0
+keras == 2.2.4
+tensorflow-gpu==1.14.0
+opencv-python
+toposort
+albumentations
+tqdm
+flask
+pydicom
