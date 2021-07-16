@@ -110,14 +110,6 @@ $ sh visualization_Efficientnet.sh
 |Cardiomegaly|0.9350|0.8514|0.7925|
 |Total|0.9378|0.8588|0.8810|
 
-|      |Normal AP|Mask AP|mAP 50|FPS|
-|------|---------|-------|------|---|
-|Value|0.9015|0.8467|0.8741|21.04|
-
-|      |Validation mAP@Iou0.5|Validation mAP@Iou0.5:0.95|Test mAP@Iou0.75|
-|------|---------|-------|------|
-|Value|0.998|0.802|0.602|
-
 
 ## Contact
    
