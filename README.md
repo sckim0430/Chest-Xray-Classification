@@ -115,7 +115,7 @@ $ sh visualization_Efficientnet.sh
 |Value|0.9015|0.8467|0.8741|21.04|
 
 |      |Validation mAP@Iou0.5|Validation mAP@Iou0.5:0.95|Test mAP@Iou0.75|
-|------|---------|-------|------|---|
+|------|---------|-------|------|
 |Value|0.998|0.802|0.602|
 
 
