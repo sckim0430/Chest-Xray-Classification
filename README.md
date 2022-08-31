@@ -1,6 +1,6 @@
 # Chest-Xray-Classification
    
-<p align="center"><img src="https://user-images.githubusercontent.com/63839581/118935419-7e42df00-b986-11eb-911f-80173174977d.jpg"></p>
+<p align="left"><img src="https://user-images.githubusercontent.com/63839581/118935419-7e42df00-b986-11eb-911f-80173174977d.jpg"></p>
     
 ## Description
 
@@ -55,7 +55,7 @@ $ python src/segmentation/evaluate.py
 $ python src/segmentation/predict.py
 ```   
    
-<p align="center"><img src="https://user-images.githubusercontent.com/63839581/118943991-1d6bd480-b98f-11eb-947d-488f6881846c.jpg"></p>
+<p align="left"><img src="https://user-images.githubusercontent.com/63839581/118943991-1d6bd480-b98f-11eb-947d-488f6881846c.jpg"></p>
    
 Classification Module used **Ensemble Model**(densenet169, inceptionV3, Xception) and **EfficientNet**.
 
@@ -99,7 +99,7 @@ $ sh evaluate_Efficientnet.sh
 $ sh visualization_Efficientnet.sh
 ```   
    
-<p align="center"><img src="https://user-images.githubusercontent.com/63839581/118946998-e0eda800-b991-11eb-8b91-0f99219ccc8e.jpg"></p>
+<p align="left"><img src="https://user-images.githubusercontent.com/63839581/118946998-e0eda800-b991-11eb-8b91-0f99219ccc8e.jpg"></p>
    
 ## Result
 |disease|Accuracy|Precision|Recall|
