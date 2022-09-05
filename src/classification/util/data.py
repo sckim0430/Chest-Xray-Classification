@@ -1,6 +1,8 @@
 """Data Processing Utils
 """
-def to_categori(array,num_class=None):
+
+
+def to_categori(array, num_class=None):
     """Convert Labels to One Hot Format Labels
 
     Args:
@@ -15,7 +17,7 @@ def to_categori(array,num_class=None):
         return None
 
     categorical = []
-    
+
     for a in array:
         cat = np.zeros(num_class)
         for idx in a:
@@ -23,6 +25,7 @@ def to_categori(array,num_class=None):
         categorical.append(cat)
 
     return categorical
+
 
 def convert_to_label(Target):
     """Convert str Label to int Label
@@ -37,7 +40,7 @@ def convert_to_label(Target):
 
     for t in Target:
         tmp_target.append(t.split('|'))
-    
+
     label = []
 
     for t in tmp_target:
@@ -58,20 +61,21 @@ def convert_to_label(Target):
             else:
                 print('Target Error! you should look csv file!')
                 return None
-        
+
         sub_label.sort()
 
         label_sub_str = ''
 
-        for index,val in enumerate(sub_label):
+        for index, val in enumerate(sub_label):
             if index == len(sub_label)-1:
                 label_sub_str += '{}'.format(val)
             else:
                 label_sub_str += '{}_'.format(val)
 
-        label.append(label_sub_str)        
+        label.append(label_sub_str)
 
     return label
+
 
 def preprocess_input(x, model):
     """Preprocess Input Image
@@ -84,33 +88,34 @@ def preprocess_input(x, model):
         np.ndarray: image array
     """
     x = x.astype("float32")
-    if model in ("inception","xception","mobilenet"): 
+    if model in ("inception", "xception", "mobilenet"):
         x /= 255.
         x -= 0.5
         x *= 2.
-    if model in ("densenet"): 
+    if model in ("densenet"):
         x /= 255.
         if x.shape[-1] == 3:
             x[..., 0] -= 0.485
             x[..., 1] -= 0.456
-            x[..., 2] -= 0.406 
-            x[..., 0] /= 0.229 
+            x[..., 2] -= 0.406
+            x[..., 0] /= 0.229
             x[..., 1] /= 0.224
-            x[..., 2] /= 0.225 
-        elif x.shape[-1] == 1: 
+            x[..., 2] /= 0.225
+        elif x.shape[-1] == 1:
             x[..., 0] -= 0.449
             x[..., 0] /= 0.226
-    elif model in ("resnet","vgg"):
+    elif model in ("resnet", "vgg"):
         if x.shape[-1] == 3:
             x[..., 0] -= 103.939
             x[..., 1] -= 116.779
             x[..., 2] -= 123.680
-        elif x.shape[-1] == 1: 
+        elif x.shape[-1] == 1:
             x[..., 0] -= 115.799
     return x
 
-def CalculateClassWeight(train_df,class_num,to_categori):
-    
+
+def CalculateClassWeight(train_df, class_num, to_categori):
+
     labels = []
     class_frequency = []
     class_weight_dict = {}
@@ -118,12 +123,14 @@ def CalculateClassWeight(train_df,class_num,to_categori):
     for lst in train_df.Labels:
         labels.append(list(int(i) for i in lst.split('_')))
 
-    label_of_onehot = np.asarray(to_categori(labels,class_num))
+    label_of_onehot = np.asarray(to_categori(labels, class_num))
     label_of_onehot = label_of_onehot.sum(axis=0)
 
     for each_class in range(class_num):
-        class_frequency.append(label_of_onehot[each_class]/float(len(train_df)))
+        class_frequency.append(
+            label_of_onehot[each_class]/float(len(train_df)))
     for each_class in range(class_num):
-        class_weight_dict[each_class] = np.max(class_frequency)/class_frequency[each_class]
+        class_weight_dict[each_class] = np.max(
+            class_frequency)/class_frequency[each_class]
 
     return class_weight_dict

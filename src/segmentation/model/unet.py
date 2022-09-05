@@ -1,10 +1,11 @@
 """UNet Model Class
 """
 
-from keras import backend as K 
+from keras import backend as K
 from keras.models import Model
 from keras.optimizers import *
 from model.utils import input_tensor, single_conv, double_conv, deconv, pooling, merge, callback
+
 
 def dice_coef(y_true, y_pred, smooth=1):
     """Get Dice Coefficient
@@ -17,9 +18,9 @@ def dice_coef(y_true, y_pred, smooth=1):
     Returns:
         float : Dice Coefficient
     """
-    intersection = K.sum(y_true * y_pred, axis=[1,2,3])
-    union = K.sum(y_true, axis=[1,2,3]) + K.sum(y_pred, axis=[1,2,3])
-    return K.mean( (2. * intersection + smooth) / (union + smooth), axis=0)
+    intersection = K.sum(y_true * y_pred, axis=[1, 2, 3])
+    union = K.sum(y_true, axis=[1, 2, 3]) + K.sum(y_pred, axis=[1, 2, 3])
+    return K.mean((2. * intersection + smooth) / (union + smooth), axis=0)
 
 
 class UNet(Model):
@@ -30,11 +31,12 @@ class UNet(Model):
     Build function is also defined for model compilation and summary
     checkpoint returns a ModelCheckpoint for best model fitting
     """
+
     def __init__(
         self,
         input_size,
         n_filters,
-        pretrained_weights = None
+        pretrained_weights=None
     ):
         # define input layer
         input = input_tensor(input_size)
@@ -75,14 +77,15 @@ class UNet(Model):
         output = single_conv(conv9, 1, 1)
 
         # initialize Keras Model with defined above input and output layers
-        super(UNet, self).__init__(inputs = input, outputs = output)
-        
+        super(UNet, self).__init__(inputs=input, outputs=output)
+
         # load preatrained weights
         if pretrained_weights:
             self.load_weights(pretrained_weights)
 
     def build(self):
-        self.compile(optimizer=Adam(), loss="binary_crossentropy", metrics=[dice_coef])
+        self.compile(optimizer=Adam(), loss="binary_crossentropy",
+                     metrics=[dice_coef])
         self.summary()
 
     def save_model(self, name):
@@ -92,7 +95,6 @@ class UNet(Model):
     def checkpoint(name):
         return callback(name)
 
-        
-    
+
 # TODO: FIX SAVING MODEL: AT THIS POINT, ONLY SAVING MODEL WEIGHTS IS AVAILBILE
 # SINCE SUBSCLASSING FROM KERAS.MODEL RESTRICTS SAVING MODEL AS AN HDF5 FILE

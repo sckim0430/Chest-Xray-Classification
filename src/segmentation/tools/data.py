@@ -11,14 +11,15 @@ import numpy as np
 import os
 import random
 
-os.environ['KMP_DUPLICATE_LIB_OK']='True'
+os.environ['KMP_DUPLICATE_LIB_OK'] = 'True'
+
 
 def prepare_dataset(
     path_to_data,
     image_folder,
     mask_folder,
     n_samples,
-    as_gray = True
+    as_gray=True
 ):
     """ Prepare Dataset
     Function that takes path to DataSet folder
@@ -34,22 +35,22 @@ def prepare_dataset(
 
     for img_file in os.listdir(path_to_image):
         try:
-            img_name = os.path.join(path_to_image,img_file)
-            mask_name = os.path.join(path_to_mask,img_file)
+            img_name = os.path.join(path_to_image, img_file)
+            mask_name = os.path.join(path_to_mask, img_file)
 
             coefficient = random.uniform(0, 2)
 
-            img = io.imread(fname = img_name, as_gray = as_gray)
+            img = io.imread(fname=img_name, as_gray=as_gray)
             os.remove(img_name)
-            new_img = square_image(img, random = coefficient)
+            new_img = square_image(img, random=coefficient)
             new_img = (new_img * 255).astype('uint8')
-            io.imsave(fname = img_name, arr = new_img)
+            io.imsave(fname=img_name, arr=new_img)
 
-            mask = io.imread(fname = mask_name,as_gray = as_gray)
+            mask = io.imread(fname=mask_name, as_gray=as_gray)
             os.remove(mask_name)
-            new_mask = square_image(mask, random = coefficient)
+            new_mask = square_image(mask, random=coefficient)
             new_mask = (new_mask * 255).astype('uint8')
-            io.imsave(fname = mask_name, arr = new_mask)
+            io.imsave(fname=mask_name, arr=new_mask)
 
             print("Successfully added paddings to image and mask {}".format(img_file))
         except:
@@ -61,14 +62,15 @@ def prepare_dataset(
 
     print("All images and masks were resized to SQUARE format")
 
+
 def train_generator(
     batch_size,
     train_path,
     image_folder,
     mask_folder,
     target_size,
-    image_color_mode = 'grayscale',
-    mask_color_mode = 'grayscale'
+    image_color_mode='grayscale',
+    mask_color_mode='grayscale'
 ):
     """ Image Data Generator
     Function that generates batches of data (img, mask) for training
@@ -80,31 +82,32 @@ def train_generator(
     mask_datagen = ImageDataGenerator(rescale=1. / 255)
     image_generator = image_datagen.flow_from_directory(
         train_path,
-        classes = [image_folder],
-        class_mode = None,
-        color_mode = image_color_mode,
-        target_size = target_size,
-        batch_size = batch_size,
-        seed = 1
+        classes=[image_folder],
+        class_mode=None,
+        color_mode=image_color_mode,
+        target_size=target_size,
+        batch_size=batch_size,
+        seed=1
     )
     mask_generator = mask_datagen.flow_from_directory(
         train_path,
-        classes = [mask_folder],
-        class_mode = None,
-        color_mode = mask_color_mode,
-        target_size = target_size,
-        batch_size = batch_size,
-        seed = 1
+        classes=[mask_folder],
+        class_mode=None,
+        color_mode=mask_color_mode,
+        target_size=target_size,
+        batch_size=batch_size,
+        seed=1
     )
     train_generator = zip(image_generator, mask_generator)
-    for (img,mask) in train_generator:
+    for (img, mask) in train_generator:
         mask = normalize_mask(mask)
-        yield (img,mask)
+        yield (img, mask)
+
 
 def test_generator(
     test_path,
     target_size,
-    as_gray = True
+    as_gray=True
 ):
     """ Image Data Generator
     Function that generates batches od data for testing from specified folder
@@ -113,10 +116,11 @@ def test_generator(
     Does preprocessing (normalization to 0-1)
     """
     for test_img in os.listdir(test_path):
-        img = io.imread(os.path.join(test_path,test_img),as_gray = as_gray)
+        img = io.imread(os.path.join(test_path, test_img), as_gray=as_gray)
         img = img/255.
         img = reshape_image(img, target_size)
         yield img
+
 
 def save_results(
     save_path,
@@ -126,11 +130,13 @@ def save_results(
     Function that takes predictions from U-Net model
     and saves them to specified folder.
     """
-    for i,item in enumerate(npyfile):
+    for i, item in enumerate(npyfile):
         img = normalize_mask(item)
         img = (img * 255).astype('uint8')
         # io.imsave(os.path.join(save_path,"%d_predict.png"%(i+1)),img)
-        cv2.imwrite(os.path.join(save_path,"%d_predict.png"%(i+1)),train_img)
+        cv2.imwrite(os.path.join(save_path, "%d_predict.png" %
+                    (i+1)), train_img)
+
 
 def is_file(
     file_name
